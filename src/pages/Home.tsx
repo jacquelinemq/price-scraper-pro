@@ -5,14 +5,18 @@ import { DataTable } from '../components/DataTable';
 import { ChartsPanel } from '../components/ChartsPanel';
 import { TerminalLogs } from '../components/TerminalLogs';
 import { Activity, Database } from 'lucide-react';
+import { Banner } from '../components/Banner';
+import { AuthHeader } from '../components/AuthHeader';
 
 export default function Home() {
-  const { fetchSample } = useStore();
+  const { fetchSample, checkUser } = useStore();
 
   useEffect(() => {
+    // Check auth state on load
+    checkUser();
     // Load initial sample dataset as requested
     fetchSample();
-  }, [fetchSample]);
+  }, [fetchSample, checkUser]);
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white selection:bg-emerald-500/30 font-sans relative overflow-hidden pb-20">
@@ -32,6 +36,7 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
+            <AuthHeader />
             <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
               Live Connection
             </span>
@@ -43,6 +48,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Config & Logs */}
           <div className="lg:col-span-1 space-y-8">
+            <Banner />
             <SearchPanel />
             
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-xl relative overflow-hidden">
