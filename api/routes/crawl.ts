@@ -7,7 +7,7 @@ import { supabase } from '../supabase.js';
 const router = Router();
 
 router.post('/', async (req, res) => {
-  const { keyword, platforms } = req.body;
+  const { keyword, platforms, user_id } = req.body;
   if (!keyword) {
     return res.status(400).json({ error: 'Keyword is required' });
   }
@@ -40,7 +40,8 @@ router.post('/', async (req, res) => {
           rating: item.rating,
           url: item.url,
           platform: item.platform,
-          recommendation_label: item.recommendationLabel || null
+          recommendation_label: item.recommendationLabel || null,
+          user_id: user_id || null
         }));
 
         const { error } = await supabase
