@@ -103,23 +103,42 @@ export const useStore = create<StoreState>((set, get) => ({
   },
 
   signIn: async (email, password) => {
-    if (!supabase) return;
+    if (!supabase) {
+      set({ logs: [...get().logs, '❌ Error: Cliente Supabase no configurado. Falta .env con VITE_PUBLIC_SUPABASE_URL'] });
+      return;
+    }
+    if (!email || !password) {
+      set({ logs: [...get().logs, '❌ Error: Email y contraseña requeridos para entrar.'] });
+      return;
+    }
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      set({ logs: [...get().logs, 'Login error: ' + error.message] });
+      set({ logs: [...get().logs, '❌ Error de Login: ' + error.message] });
     } else {
-      set({ user: data.user, logs: [...get().logs, 'Logged in successfully.'] });
+      set({ user: data.user, logs: [...get().logs, '✅ Sesión iniciada correctamente.'] });
       get().checkUser();
     }
   },
 
   signUp: async (email, password) => {
-    if (!supabase) return;
-    const { error } = await supabase.auth.signUp({ email, password });
+    if (!supabase) {
+      set({ logs: [...get().logs, '❌ Error: Cliente Supabase no configurado. Falta .env con VITE_PUBLIC_SUPABASE_URL'] });
+      return;
+    }
+    if (!email || !password) {
+      set({ logs: [...get().logs, '❌ Error: Email y contraseña requeridos para el registro.'] });
+      return;
+    }
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) {
-      set({ logs: [...get().logs, 'Signup error: ' + error.message] });
+      set({ logs: [...get().logs, '❌ Error de Registro: ' + error.message] });
     } else {
-      set({ logs: [...get().logs, 'Signup successful! Please check your email or log in directly if email confirmation is disabled.'] });
+      if (data.session) {
+        set({ user: data.user, logs: [...get().logs, '✅ Registro y Login exitosos!'] });
+        get().checkUser();
+      } else {
+        set({ logs: [...get().logs, '✅ Registro exitoso! Por favor, verifica tu correo (si está activado en Supabase).'] });
+      }
     }
   },
 
