@@ -13,6 +13,7 @@
     "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\""
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.102.1",
     "cli-table3": "^0.6.5",
     "clsx": "^2.1.1",
     "commander": "^14.0.3",
