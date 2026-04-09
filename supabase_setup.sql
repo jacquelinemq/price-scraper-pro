@@ -17,3 +17,6 @@ CREATE TABLE IF NOT EXISTS scraped_products (
 -- Add some indexes for faster queries later
 CREATE INDEX IF NOT EXISTS idx_scraped_products_keyword ON scraped_products(keyword);
 CREATE INDEX IF NOT EXISTS idx_scraped_products_created_at ON scraped_products(created_at);
+
+-- Disable Row Level Security (RLS) so our API can insert data using the Anon Key
+ALTER TABLE scraped_products DISABLE ROW LEVEL SECURITY;
